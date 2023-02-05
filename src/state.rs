@@ -7,7 +7,7 @@ use winit::{
     event_loop::{ControlFlow, EventLoop},
     window::{Window, WindowBuilder},
 };
-use std::time::Duration;
+use std::time::{Instant, Duration};
 
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
@@ -76,6 +76,7 @@ struct State<N> {
     camera_buffer: wgpu::Buffer,
     camera_bind_group: wgpu::BindGroup,
     navigator: N,
+    last_update_instant: Option<Instant>,
 }
 
 impl<N: Navigator + Default> State<N> {
@@ -259,6 +260,7 @@ impl<N: Navigator + Default> State<N> {
             camera_buffer,
             camera_bind_group,
             navigator: N::default(),
+            last_update_instant: None,
         }
     }
 
@@ -281,7 +283,13 @@ impl<N: Navigator + Default> State<N> {
     }
 
     fn update(&mut self) {
-        self.navigator.navigator_update(Duration::new(0, 2_000_000), &mut self.camera);
+        let delta = if let Some(instant) = self.last_update_instant {
+            instant.elapsed()
+        } else { 
+            Duration::new(0,0)
+        };
+        self.last_update_instant = Some(Instant::now());
+        self.navigator.navigator_update(delta, &mut self.camera, [self.config.width, self.config.height]);
         self.queue
             .write_buffer(&self.camera_buffer, 0, bytemuck::cast_slice(&[self.camera]));
 
