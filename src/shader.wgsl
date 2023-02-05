@@ -4,6 +4,8 @@ struct CameraUniform {
     top_left: vec2<f32>,
     scale: f32,
     n_iter: i32,
+    time: f32,
+    padding: f32
 }
 
 @group(0) @binding(0)
@@ -49,9 +51,9 @@ fn in_mandelbrot(c: vec2<f32>) -> vec4<f32> {
         return vec4(0.0,0.0,0.0,1.0);
     } else {
         var n = (f32(i) + 1.0 - log(log2(dot(z,z)))) / 100.0 * 255.0;
-        var r = sin(0.1 * n);
-        var g = sin(0.1235 * n + 1.23);
-        var b = sin(0.12 * n + 0.23);
+        var r = sin(0.071 * n + camera.time * 3.3);
+        var g = sin(0.09235 * n + camera.time * 3.1+ 1.23);
+        var b = sin(0.0812 * n + camera.time * 4.2 + 0.23);
         return vec4(r,g,b,1.0);
     }
 }

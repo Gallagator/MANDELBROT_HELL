@@ -60,16 +60,16 @@ impl Navigator for VelocityNavigator {
         for keycode in self.key_held.iter() {
             let key_fun:fn([f32; 2], [u32; 2], _, _, _) -> ([f32; 2], f32) = match keycode {
                 VirtualKeyCode::W | VirtualKeyCode::K | VirtualKeyCode::Up => {
-                    |pos: [f32; 2], _, velocity, secs, scale| {([pos[0], pos[1] + velocity * secs * scale * 100.0], scale)}
+                    |pos: [f32; 2], _, velocity, secs, scale| {([pos[0], pos[1] + velocity * secs * scale * 200.0], scale)}
                 },
                 VirtualKeyCode::A | VirtualKeyCode::H | VirtualKeyCode::Left => {
-                    |pos: [f32; 2], _, velocity, secs, scale| {([pos[0] - velocity * secs * scale * 100.0, pos[1]], scale)}
+                    |pos: [f32; 2], _, velocity, secs, scale| {([pos[0] - velocity * secs * scale * 200.0, pos[1]], scale)}
                 },
                 VirtualKeyCode::S | VirtualKeyCode::J | VirtualKeyCode::Down => {
-                    |pos: [f32; 2], _, velocity, secs, scale| {([pos[0], pos[1] - velocity * secs * scale * 100.0], scale)}
+                    |pos: [f32; 2], _, velocity, secs, scale| {([pos[0], pos[1] - velocity * secs * scale * 200.0], scale)}
                 },
                 VirtualKeyCode::D | VirtualKeyCode::L | VirtualKeyCode::Right => {
-                    |pos: [f32; 2], _, velocity, secs, scale| {([pos[0] + velocity * secs * scale * 100.0, pos[1]], scale)}
+                    |pos: [f32; 2], _, velocity, secs, scale| {([pos[0] + velocity * secs * scale * 200.0, pos[1]], scale)}
                 },
                 VirtualKeyCode::Equals | VirtualKeyCode::Plus => {
                     move |pos: [f32; 2], windim, velocity, secs, scale| {
@@ -90,6 +90,7 @@ impl Navigator for VelocityNavigator {
                 _ => { |pos: [f32; 2], _, _, _, scale| {(pos, scale)} },
             };
             let (pos, scale)= key_fun(camera.get_top_left(), window_dims, self.velocity, delta.as_secs_f32(), camera.get_scale());
+            camera.time += delta.as_secs_f32();
             camera.set_scale(scale);
             camera.set_top_left(pos);
         }

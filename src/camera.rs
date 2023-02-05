@@ -7,6 +7,8 @@ pub struct Camera {
     top_left: [f32; 2],
     scale: f32,
     n_iter: i32,
+    pub time: f32,
+    padding: f32,
 }
 
 impl Default for Camera {
@@ -21,6 +23,8 @@ impl Camera {
             top_left: point,
             scale,
             n_iter,
+            time: 0.0,
+            padding: 0.0,
         }
     }
 
