@@ -89,6 +89,15 @@ impl Navigator for VelocityNavigator {
                 },
                 _ => { |pos: [f32; 2], _, _, _, scale| {(pos, scale)} },
             };
+            match keycode {
+                VirtualKeyCode::E => {
+                    camera.n_iter += 1;
+                }
+                VirtualKeyCode::Q => {
+                    camera.n_iter -= 1;
+                }
+                _ => {}
+            }
             let (pos, scale)= key_fun(camera.get_top_left(), window_dims, self.velocity, delta.as_secs_f32(), camera.get_scale());
             camera.time += delta.as_secs_f32();
             camera.set_scale(scale);

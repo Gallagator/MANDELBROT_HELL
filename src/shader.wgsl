@@ -50,10 +50,10 @@ fn in_mandelbrot(c: vec2<f32>) -> vec4<f32> {
     if(i == camera.n_iter) {
         return vec4(0.0,0.0,0.0,1.0);
     } else {
-        var n = (f32(i) + 1.0 - log(log2(dot(z,z)))) / 100.0 * 255.0;
-        var r = sin(0.071 * n + camera.time * 3.3);
-        var g = sin(0.09235 * n + camera.time * 3.1+ 1.23);
-        var b = sin(0.0812 * n + camera.time * 4.2 + 0.23);
+        var n = (f32(i) + 1.0 - log(0.3 * log2(dot(z,z)))) / 100.0 * 255.0;
+        var r = 0.9 * sin(0.071 * n + camera.time * 2.3) + 0.0943;
+        var g = 0.9 * sin(0.09235 * n + camera.time * 1.1+ 1.23)+ 0.0432;
+        var b = 0.9 * sin(0.0812 * n + camera.time * 3.2 + 1.23);
         return vec4(r,g,b,1.0);
     }
 }

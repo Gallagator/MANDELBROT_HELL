@@ -6,7 +6,7 @@ use cgmath;
 pub struct Camera {
     top_left: [f32; 2],
     scale: f32,
-    n_iter: i32,
+    pub n_iter: i32,
     pub time: f32,
     padding: f32,
 }
