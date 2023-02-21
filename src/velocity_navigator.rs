@@ -91,10 +91,10 @@ impl Navigator for VelocityNavigator {
             };
             match keycode {
                 VirtualKeyCode::E => {
-                    camera.n_iter += 1;
+                    camera.n_iter += 0.1;
                 }
                 VirtualKeyCode::Q => {
-                    camera.n_iter -= 1;
+                    camera.n_iter -= 0.1;
                 }
                 _ => {}
             }

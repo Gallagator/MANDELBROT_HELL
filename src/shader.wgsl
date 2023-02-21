@@ -3,7 +3,7 @@
 struct CameraUniform {
     top_left: vec2<f32>,
     scale: f32,
-    n_iter: i32,
+    n_iter: f32,
     time: f32,
     padding: f32
 }
@@ -22,6 +22,7 @@ struct VertexOutput {
 };
 
 @vertex
+
 fn vs_main(
     model: VertexInput,
 ) -> VertexOutput {
@@ -41,10 +42,10 @@ fn fs_main(in: VertexOutput) -> @location(0) vec4<f32> {
 
 fn in_mandelbrot(c: vec2<f32>) -> vec4<f32> {
     var z = c;
-    var i: i32 = 0;
+    var i: f32 = 0.0;
     while(dot(z,z) < 4.0 && i < camera.n_iter) {
         z = complex_mult(z, z) + c;
-        i += 1;
+        i += 1.0;
     }
     
     if(i == camera.n_iter) {

@@ -18,3 +18,8 @@ cfg-if = "1.0.0"
 bytemuck = { version = "1.12", features = [ "derive" ] }
 cgmath = "0.18"
 
+[toolchain.optional]
+rust-std = ["x86_64-pc-windows-gnu"]
+
+[target.x86_64-pc-windows-gnu]
+linker = "/usr/bin/x86_64-w64-mingw32-gcc"
