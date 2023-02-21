@@ -1,12 +1,10 @@
-use crate::camera::{Camera, self};
+use crate::camera::Camera;
 use crate::key_held::KeyHeld;
 use crate::navigator::Navigator;
 
-use std::{time::Duration, arch::x86_64::_mm_castpd_ps};
+use std::{time::Duration};
 use winit::{
     event::*,
-    event_loop::{ControlFlow, EventLoop},
-    window::{Window, WindowBuilder},
 };
 
 pub struct VelocityNavigator {

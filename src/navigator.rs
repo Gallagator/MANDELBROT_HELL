@@ -1,4 +1,4 @@
-use crate::camera::{Camera, self};
+use crate::camera::Camera;
 use std::time::Duration;
 use winit::event::WindowEvent;
 

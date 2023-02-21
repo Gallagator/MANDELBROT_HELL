@@ -1,10 +1,3 @@
-use std::borrow::Cow;
-use winit::{
-    event::{Event, WindowEvent},
-    event_loop::{ControlFlow, EventLoop},
-    window::Window,
-};
-
 mod camera;
 mod key_held;
 mod navigator;
