@@ -3,7 +3,7 @@
 struct CameraUniform {
     top_left: vec2<f32>,
     scale: f32,
-    n_iter: f32,
+    n_iter: u32,
     time: f32,
     padding: f32
 }
@@ -42,10 +42,30 @@ fn fs_main(in: VertexOutput) -> @location(0) vec4<f32> {
 
 fn in_mandelbrot(c: vec2<f32>) -> vec4<f32> {
     var z = c;
-    var i: f32 = 0.0;
+    var i: u32 = 0u;
     while(dot(z,z) < 4.0 && i < camera.n_iter) {
         z = complex_mult(z, z) + c;
-        i += 1.0;
+        i += 1u;
+    }
+    
+    if(i == camera.n_iter) {
+        return vec4(0.0,0.0,0.0,1.0);
+    } else {
+        var n = (f32(i) + 1.0 - log(0.3 * log2(dot(z,z)))) / 100.0 * 255.0;
+        var r = 0.9 * sin(0.071 * n + camera.time * 2.3) + 0.0943;
+        var g = 0.9 * sin(0.09235 * n + camera.time * 1.1+ 1.23)+ 0.0432;
+        var b = 0.9 * sin(0.0812 * n + camera.time * 3.2 + 1.23);
+        return vec4(r,g,b,1.0);
+    }
+}
+
+fn in_ship(c: vec2<f32>) -> vec4<f32> {
+    var z = c;
+    var i: u32 = 0u;
+    while(dot(z,z) < 4.0 && i < camera.n_iter) {
+        var ztemp = vec2<f32>(abs(z.x), abs(z.y));
+        z = complex_mult(ztemp, ztemp) + c;
+        i += 1u;
     }
     
     if(i == camera.n_iter) {

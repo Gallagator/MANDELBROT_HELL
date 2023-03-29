@@ -2,10 +2,8 @@ use crate::camera::Camera;
 use crate::key_held::KeyHeld;
 use crate::navigator::Navigator;
 
-use std::{time::Duration};
-use winit::{
-    event::*,
-};
+use std::time::Duration;
+use winit::event::*;
 
 pub struct VelocityNavigator {
     velocity: f32,
@@ -56,47 +54,71 @@ impl Navigator for VelocityNavigator {
 
     fn navigator_update(&mut self, delta: Duration, camera: &mut Camera, window_dims: [u32; 2]) {
         for keycode in self.key_held.iter() {
-            let key_fun:fn([f32; 2], [u32; 2], _, _, _) -> ([f32; 2], f32) = match keycode {
+            let key_fun: fn([f32; 2], [u32; 2], _, _, _) -> ([f32; 2], f32) = match keycode {
                 VirtualKeyCode::W | VirtualKeyCode::K | VirtualKeyCode::Up => {
-                    |pos: [f32; 2], _, velocity, secs, scale| {([pos[0], pos[1] + velocity * secs * scale * 200.0], scale)}
-                },
+                    |pos: [f32; 2], _, velocity, secs, scale| {
+                        ([pos[0], pos[1] + velocity * secs * scale * 200.0], scale)
+                    }
+                }
                 VirtualKeyCode::A | VirtualKeyCode::H | VirtualKeyCode::Left => {
-                    |pos: [f32; 2], _, velocity, secs, scale| {([pos[0] - velocity * secs * scale * 200.0, pos[1]], scale)}
-                },
+                    |pos: [f32; 2], _, velocity, secs, scale| {
+                        ([pos[0] - velocity * secs * scale * 200.0, pos[1]], scale)
+                    }
+                }
                 VirtualKeyCode::S | VirtualKeyCode::J | VirtualKeyCode::Down => {
-                    |pos: [f32; 2], _, velocity, secs, scale| {([pos[0], pos[1] - velocity * secs * scale * 200.0], scale)}
-                },
+                    |pos: [f32; 2], _, velocity, secs, scale| {
+                        ([pos[0], pos[1] - velocity * secs * scale * 200.0], scale)
+                    }
+                }
                 VirtualKeyCode::D | VirtualKeyCode::L | VirtualKeyCode::Right => {
-                    |pos: [f32; 2], _, velocity, secs, scale| {([pos[0] + velocity * secs * scale * 200.0, pos[1]], scale)}
-                },
+                    |pos: [f32; 2], _, velocity, secs, scale| {
+                        ([pos[0] + velocity * secs * scale * 200.0, pos[1]], scale)
+                    }
+                }
                 VirtualKeyCode::Equals | VirtualKeyCode::Plus => {
                     move |pos: [f32; 2], windim, velocity, secs, scale| {
-                        let centre = [pos[0] + windim[0] as f32 * scale * 0.5, pos[1] - windim[1] as f32 * scale * 0.5];
+                        let centre = [
+                            pos[0] + windim[0] as f32 * scale * 0.5,
+                            pos[1] - windim[1] as f32 * scale * 0.5,
+                        ];
                         let scale = scale * (1.0 - velocity * secs);
-                        let top_left = [centre[0] - windim[0] as f32 * scale * 0.5, centre[1] + windim[1] as f32 * scale * 0.5];
+                        let top_left = [
+                            centre[0] - windim[0] as f32 * scale * 0.5,
+                            centre[1] + windim[1] as f32 * scale * 0.5,
+                        ];
                         (top_left, scale)
                     }
+                }
+                VirtualKeyCode::Minus => move |pos: [f32; 2], windim, velocity, secs, scale| {
+                    let centre = [
+                        pos[0] + windim[0] as f32 * scale * 0.5,
+                        pos[1] - windim[1] as f32 * scale * 0.5,
+                    ];
+                    let scale = scale * (1.0 + velocity * secs);
+                    let top_left = [
+                        centre[0] - windim[0] as f32 * scale * 0.5,
+                        centre[1] + windim[1] as f32 * scale * 0.5,
+                    ];
+                    (top_left, scale)
                 },
-                VirtualKeyCode::Minus => {
-                    move |pos: [f32; 2], windim, velocity, secs, scale| {
-                        let centre = [pos[0] + windim[0] as f32 * scale * 0.5, pos[1] - windim[1] as f32 * scale * 0.5];
-                        let scale = scale * (1.0 + velocity * secs);
-                        let top_left = [centre[0] - windim[0] as f32 * scale * 0.5, centre[1] + windim[1] as f32 * scale * 0.5];
-                        (top_left, scale)
-                    }
-                },
-                _ => { |pos: [f32; 2], _, _, _, scale| {(pos, scale)} },
+                _ => |pos: [f32; 2], _, _, _, scale| (pos, scale),
             };
             match keycode {
                 VirtualKeyCode::E => {
-                    camera.n_iter += 0.1;
+                    camera.n_iter += 1;
                 }
                 VirtualKeyCode::Q => {
-                    camera.n_iter -= 0.1;
+                    camera.n_iter -= 1;
                 }
                 _ => {}
             }
-            let (pos, scale)= key_fun(camera.get_top_left(), window_dims, self.velocity, delta.as_secs_f32(), camera.get_scale());
+            let (pos, scale) = key_fun(
+                camera.get_top_left(),
+                window_dims,
+                self.velocity,
+                delta.as_secs_f32(),
+                camera.get_scale(),
+            );
             camera.time += delta.as_secs_f32();
             camera.set_scale(scale);
             camera.set_top_left(pos);

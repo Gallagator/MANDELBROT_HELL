@@ -17,6 +17,10 @@ pollster = "0.2.5"
 cfg-if = "1.0.0"
 bytemuck = { version = "1.12", features = [ "derive" ] }
 cgmath = "0.18"
+# Audio processing
+cpal = "0.15.0"
+anyhow = "1.0.69"
+rand = "*"
 
 [toolchain.optional]
 rust-std = ["x86_64-pc-windows-gnu"]

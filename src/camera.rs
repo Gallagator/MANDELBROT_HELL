@@ -4,19 +4,19 @@
 pub struct Camera {
     top_left: [f32; 2],
     scale: f32,
-    pub n_iter: f32,
+    pub n_iter: u32,
     pub time: f32,
     padding: f32,
 }
 
 impl Default for Camera {
     fn default() -> Self {
-        Self::new([-2.0, 2.0], 0.003, 100.0)
+        Self::new([-2.0, 2.0], 0.003, 100)
     }
 }
 
 impl Camera {
-    pub fn new(point: [f32; 2], scale: f32, n_iter: f32) -> Self {
+    pub fn new(point: [f32; 2], scale: f32, n_iter: u32) -> Self {
         Self {
             top_left: point,
             scale,

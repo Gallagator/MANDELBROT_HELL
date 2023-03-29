@@ -1,13 +1,13 @@
 use std::iter;
 
-use crate::{camera::Camera, velocity_navigator::VelocityNavigator, navigator::Navigator};
+use crate::{camera::Camera, navigator::Navigator, velocity_navigator::VelocityNavigator};
+use std::time::{Duration, Instant};
 use wgpu::util::DeviceExt;
 use winit::{
     event::*,
     event_loop::{ControlFlow, EventLoop},
     window::{Window, WindowBuilder},
 };
-use std::time::{Instant, Duration};
 
 #[cfg(target_arch = "wasm32")]
 use wasm_bindgen::prelude::*;
@@ -285,16 +285,18 @@ impl<N: Navigator + Default> State<N> {
     fn update(&mut self) {
         let delta = if let Some(instant) = self.last_update_instant {
             instant.elapsed()
-        } else { 
-            Duration::new(0,0)
+        } else {
+            Duration::new(0, 0)
         };
         self.last_update_instant = Some(Instant::now());
-        self.navigator.navigator_update(delta, &mut self.camera, [self.config.width, self.config.height]);
+        self.navigator.navigator_update(
+            delta,
+            &mut self.camera,
+            [self.config.width, self.config.height],
+        );
         self.queue
             .write_buffer(&self.camera_buffer, 0, bytemuck::cast_slice(&[self.camera]));
-
     }
-    
 
     fn render(&mut self) -> Result<(), wgpu::SurfaceError> {
         let output = self.surface.get_current_texture()?;

@@ -1,4 +1,4 @@
-use std::collections::{HashSet, hash_set::Iter};
+use std::collections::{hash_set::Iter, HashSet};
 use winit::event::*;
 
 pub struct KeyHeld {
@@ -20,11 +20,11 @@ impl KeyHeld {
         self.keymap.remove(code);
     }
 
-//     pub fn key_held(&self, code: &VirtualKeyCode) -> bool {
-//         self.keymap.contains(&code)
-//     }
+    //     pub fn key_held(&self, code: &VirtualKeyCode) -> bool {
+    //         self.keymap.contains(&code)
+    //     }
 
-    pub fn iter<'a>(&'a self) -> Iter<'a, VirtualKeyCode>{
+    pub fn iter<'a>(&'a self) -> Iter<'a, VirtualKeyCode> {
         self.keymap.iter()
     }
 }
