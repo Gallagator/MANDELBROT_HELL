@@ -61,13 +61,16 @@ impl AudioOutputBuilder {
     {
         use rand::RngCore;
         let err_fn = |err| eprintln!("Error building output sound stream: {}", err);
-        println!("samplerate: {}", self.config.sample_rate().0);
+        let channels = self.config.channels() as usize;
         Ok(self.device.build_output_stream(
             &self.config.clone().into(),
             move |output: &mut [T], _: &cpal::OutputCallbackInfo| {
-                for sample in output.iter_mut() {
+                for frame in output.chunks_mut(channels) {
                     let mut rng = rand::thread_rng();
-                    *sample = rng.next_u32().to_sample();
+                    let value = rng.next_u32().to_sample();
+                    for sample in frame.iter_mut() {
+                        *sample = value;
+                    }
                 }
             },
             err_fn,
