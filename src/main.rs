@@ -1,15 +1,17 @@
 use anyhow;
 
-mod audio_output;
+mod audio;
 mod camera;
 mod key_held;
 mod navigator;
 mod state;
 mod velocity_navigator;
 
+// TODO use rust argparser
 fn main() -> Result<(), anyhow::Error> {
-    let ao = audio_output::AudioOutputBuilder::new()?;
-    let player = ao.play()?;
+    let args: Vec<_> = std::env::args().collect();
+    let ao = audio::AudioOutputBuilder::new()?;
+    let player = ao.play(&args[1])?;
     pollster::block_on(state::run());
     Ok(())
 }

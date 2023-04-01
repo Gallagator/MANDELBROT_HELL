@@ -21,6 +21,9 @@ cgmath = "0.18"
 cpal = "0.15.0"
 anyhow = "1.0.69"
 rand = "*"
+minimp3 = "0.5.1"
+rubato = "0.12.0"
+audio = "0.2.0-alpha.4"
 
 [toolchain.optional]
 rust-std = ["x86_64-pc-windows-gnu"]
